@@ -1,0 +1,39 @@
+html, body {
+  background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898;
+  background-blend-mode: multiply,multiply;
+}
+
+#header {
+  font-size: 60px;
+  text-align: center;
+  color: #fafafa;
+}
+
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.awesomeTip-wrapper {
+  width: 400px;
+  font-size: 40px;
+}
+
+.autor {
+  text-align: right;
+  font-style:italic;
+  font-size: 20px;
+}
+
+.tip-box {
+  margin-top: 12px;
+  padding: 15px;
+  background: #333;
+  border-radius: 4px;
+  border-color: gray;
+  border-width: 2px;
+  font-size: 30px;
+  text-align: center;
+  color: #fafafa;
+}
