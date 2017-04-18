@@ -1,6 +1,8 @@
 # Vim tip of the day
 *The idea is to have a website that shows one and only one vim tip a day.
 Learn one thing a day and you will soon be masterful!*
+![Image of Vim tip of the day](http://i.imgur.com/evkOVVV.png)
+
 
 ## Todo
 * users can add new tips
