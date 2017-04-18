@@ -1,14 +1,11 @@
--- Read more about this program in the official Elm guide:
--- https://guide.elm-lang.org/architecture/effects/http.html
-
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (..)
 import Http
 import Json.Decode as Decode exposing (int,string,at)
 import RemoteData as RD exposing (WebData)
+import Random
 
-
+main : Program Never Model Msg
 main =
   Html.program
     { init = init
@@ -35,17 +32,19 @@ type alias Model =
 init : (Model, Cmd Msg)
 init =
   ( {tip = RD.NotAsked}
-  , getTip
+  , getRandomTip
   )
 
 
 
 -- UPDATE
-
+getRandomTip : Cmd Msg
+getRandomTip =
+  Random.generate GetTip (Random.int 1 5)
 
 type Msg =
   NoOp
-  | GetTip
+  | GetTip Int
   | TipResponse (WebData Tip)
 
 
@@ -54,8 +53,8 @@ update msg model =
   case msg of
     NoOp ->
       (model, Cmd.none)
-    GetTip ->
-      (model, getTip)
+    GetTip num->
+      (model, getTip num)
     TipResponse tip ->
       {model | tip = tip} ! []
 
@@ -64,6 +63,7 @@ update msg model =
 
 -- VIEW
 
+stylesheet : Html Msg
 stylesheet =
     let
         tag = "link"
@@ -77,21 +77,33 @@ stylesheet =
         node tag attrs children
 
 
+awesomeTip : WebData Tip -> Html Msg
 awesomeTip tipWebdata =
-  case tipWebdata of
-    RD.Success tip ->
-      div [
-        class "wrapper"
-      ] [
-        div [ class "awesomeTip-wrapper"]
-          [
-              div  [ class "autor"] [ text tip.author]
-              ,div [ class "tip-box"] [ text tip.text]
+  let
+    tipElement : String -> String -> Html Msg
+    tipElement author text_ =
+        div [
+          class "wrapper"
+        ] [
+          div [ class "awesomeTip-wrapper"]
+            [
+                div  [ class "autor"] [ text author]
+               ,div [ class "tip-box"] [ text text_]
+          ]
         ]
-      ]
+  in
+    case tipWebdata of
+      RD.Success tip ->
+        tipElement tip.author tip.text
 
-    _ ->
-      div [] [ text "loading..."]
+      RD.Failure e ->
+        tipElement ":C" ("Error: " ++ toString e)
+
+      RD.NotAsked ->
+        tipElement "..." "Initialising..."
+
+      RD.Loading ->
+        tipElement "Loading..." "Loading..."
 
 
 view : Model -> Html Msg
@@ -121,8 +133,12 @@ decodeTip =
       (at ["text"] string)
       (at ["author"] string)
 
-getTip : Cmd Msg
-getTip =
-    Http.get "http://localhost:3000/tips/1" decodeTip
+
+getTip : Int -> Cmd Msg
+getTip id_ =
+  let
+    url = "http://localhost:3000/tips/" ++ (toString id_)
+  in
+    Http.get url decodeTip
         |> RD.sendRequest
         |> Cmd.map TipResponse

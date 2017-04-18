@@ -1,0 +1,9 @@
+{
+	"tips": [
+		{ "id": 1, "text": ". repeats your last action", "author": "Christoph"},
+		{ "id": 2, "text": ":wq write and quit", "author": "Nils"},
+		{ "id": 3, "text": "gg jumps to top of the file", "author": "Nils"},
+		{ "id": 4, "text": "* searches current word, Shift + * searches backwards", "author": "Nils"},
+		{ "id": 5, "text": "mz creats a marker saved on z \n jump back to it by pressing 'z\n (you can use other letters than z)", "author": "Nils"}
+	]
+}
